@@ -1,0 +1,11 @@
+version: "3.2"
+services:
+    postgres:
+        image: postgres
+        restart: always
+        environment:
+            POSTGRES_USER: ${EXPUNGER_USER}
+            POSTGRES_PASSWORD: ${EXPUNGER_PASS}
+            POSTGRES_DB: ${EXPUNGER_DB}
+        ports:
+            - 5432:5432
