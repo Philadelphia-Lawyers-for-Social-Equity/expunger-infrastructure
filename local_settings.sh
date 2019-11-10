@@ -1,4 +1,0 @@
-export EXPUNGER_USER=expunginator
-export EXPUNGER_PASS=you_better_change_this_password!
-export EXPUNGER_DB=expungement
-export EXPUNGER_DB_HOST=localhost

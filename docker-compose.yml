@@ -2,10 +2,36 @@ version: "3.2"
 services:
     postgres:
         image: postgres
-        restart: always
         environment:
-            POSTGRES_USER: ${EXPUNGER_USER}
+            POSTGRES_USER: plse
             POSTGRES_PASSWORD: ${EXPUNGER_PASS}
-            POSTGRES_DB: ${EXPUNGER_DB}
+            POSTGRES_DB: expunger_db
         ports:
             - 5432:5432
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+
+    expunger:
+        build:
+            context: .
+            dockerfile: ./platform/Dockerfile
+            args:
+                EXPUNGER_USER: plse
+                EXPUNGER_PASS: ${EXPUNGER_PASS}
+                EXPUNGER_KEY: ${EXPUNGER_KEY}
+                DJANGO_SETTINGS_MODULE: config.settings.docker
+        depends_on:
+            - postgres
+        image: expunger:platform
+        environment:
+            DJANGO_SETTINGS_MODULE: config.settings.docker
+            EXPUNGER_USER: plse
+            EXPUNGER_PASS: ${EXPUNGER_PASS}
+            EXPUNGER_KEY: ${EXPUNGER_KEY}
+            EXPUNGER_DB: expunger_db
+            EXPUNGER_DB_HOST: postgres
+        ports:
+            - 80:8000
+        restart: on-failure
+volumes:
+    postgres_data:
