@@ -1,13 +1,14 @@
 version: "3.2"
 services:
     postgres:
-        image: postgres
+        image: postgres:12-alpine
         environment:
             POSTGRES_USER: plse
-            POSTGRES_PASSWORD: ${EXPUNGER_PASS}
+            POSTGRES_PASSWORD: ${EXPUNGER_PASS:-defaultTestPassword}
             POSTGRES_DB: expunger_db
         ports:
             - 5432:5432
+        restart: on-failure
         volumes:
             - postgres_data:/var/lib/postgresql/data
 
@@ -17,8 +18,8 @@ services:
             dockerfile: ./platform/Dockerfile
             args:
                 EXPUNGER_USER: plse
-                EXPUNGER_PASS: ${EXPUNGER_PASS}
-                EXPUNGER_KEY: ${EXPUNGER_KEY}
+                EXPUNGER_PASS: ${EXPUNGER_PASS:-defaultTestPassword}
+                EXPUNGER_KEY: ${EXPUNGER_KEY:-aeiouandyunosetenv}
                 DJANGO_SETTINGS_MODULE: config.settings.docker
         depends_on:
             - postgres
@@ -26,8 +27,8 @@ services:
         environment:
             DJANGO_SETTINGS_MODULE: config.settings.docker
             EXPUNGER_USER: plse
-            EXPUNGER_PASS: ${EXPUNGER_PASS}
-            EXPUNGER_KEY: ${EXPUNGER_KEY}
+            EXPUNGER_PASS: ${EXPUNGER_PASS:-defaultTestPassword}
+            EXPUNGER_KEY: ${EXPUNGER_KEY:-aeiouandyunosetenv}
             EXPUNGER_DB: expunger_db
             EXPUNGER_DB_HOST: postgres
         ports:
