@@ -31,8 +31,20 @@ services:
             EXPUNGER_KEY: ${EXPUNGER_KEY:-aeiouandyunosetenv}
             EXPUNGER_DB: expunger_db
             EXPUNGER_DB_HOST: postgres
+        restart: on-failure
+
+    frontend:
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+        depends_on:
+            - expunger
+        environment:
+            BACKEND_HOST: expunger
+            NODE_ENV: production
+            PORT: 8000
         ports:
-            - 80:8000
+            - 8000:8000
         restart: on-failure
 volumes:
     postgres_data:
