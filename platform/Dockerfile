@@ -59,7 +59,7 @@ RUN chown --changes --silent --no-dereference --recursive ${EXPUNGER_USER}:${EXP
 
 # App install
 USER ${EXPUNGER_USER}
-COPY platform/src/ .
+COPY src/ .
 ENV PATH "$PATH:/home/${EXPUNGER_USER}/.local/bin"
 RUN pip3 install --user -r requirements.txt
 RUN pip3 install --user mod_wsgi

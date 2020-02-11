@@ -14,8 +14,8 @@ services:
 
     expunger:
         build:
-            context: .
-            dockerfile: ./platform/Dockerfile
+            context: ./platform
+            dockerfile: Dockerfile
             args:
                 EXPUNGER_USER: plse
                 EXPUNGER_PASS: ${EXPUNGER_PASS:-defaultTestPassword}
@@ -31,6 +31,10 @@ services:
             EXPUNGER_KEY: ${EXPUNGER_KEY:-aeiouandyunosetenv}
             EXPUNGER_DB: expunger_db
             EXPUNGER_DB_HOST: postgres
+            HOSTNAME: ${HOSTNAME:-localhost}
+            FRONTEND_HOST: ${FRONTEND_HOST:-http://localhost:3000}
+            BACKEND_HOST: ${BACKEND_HOST:-http://localhost:8000}
+            DJANGO_LOG_LEVEL: ${LOGLEVEL:-INFO}
         ports:
             - 8000:8000
         restart: on-failure
@@ -40,14 +44,13 @@ services:
             context: ./frontend
             dockerfile: Dockerfile
             args:
-                REACT_APP_BACKEND_HOST: http://localhost:8000
+                REACT_APP_BACKEND_HOST: ${BACKEND_HOST:-http://localhost:8000}
         depends_on:
             - expunger
         environment:
-            BACKEND_HOST: expunger
             NODE_ENV: production
             PORT: 3000
-            REACT_APP_BACKEND_HOST: http://localhost:8000
+            REACT_APP_BACKEND_HOST: ${BACKEND_HOST:-http://localhost:8000}
         ports:
             - 3000:3000
         restart: on-failure
