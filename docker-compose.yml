@@ -31,7 +31,7 @@ services:
             EXPUNGER_KEY: ${EXPUNGER_KEY:-aeiouandyunosetenv}
             EXPUNGER_DB: expunger_db
             EXPUNGER_DB_HOST: postgres
-            HOSTNAME: ${EXPUNGER_HOSTNAME:-localhost}
+            HOSTNAME: ${BACKEND_HOST:-localhost}
             FRONTEND_HOST: ${FRONTEND_HOST:-http://localhost:3000}
             BACKEND_HOST: ${BACKEND_HOST:-http://localhost:8000}
             DJANGO_LOG_LEVEL: ${LOGLEVEL:-INFO}
