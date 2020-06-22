@@ -65,4 +65,4 @@ RUN pip3 install --user -r requirements.txt
 RUN pip3 install --user mod_wsgi
 RUN python3 ./manage.py collectstatic --noinput
 
-ENTRYPOINT python3 ./manage.py makemigrations && python3 ./manage.py migrate && python3 ./manage.py runmodwsgi
+ENTRYPOINT python3 ./manage.py makemigrations && python3 ./manage.py migrate && python3 ./manage.py runmodwsgi --log-to-terminal
