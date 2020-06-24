@@ -1,6 +1,7 @@
 FROM dan0mau/devuan-ascii
 
-ENV APPDIR /srv/plse
+ENV INSTALL_DIR /srv/plse/install
+ENV APPDIR /srv/plse/expunger
 
 ARG EXPUNGER_USER
 ARG EXPUNGER_PASS
@@ -9,7 +10,7 @@ ARG DJANGO_SETTINGS_MODULE
 
 # System initialization
 
-WORKDIR $APPDIR
+WORKDIR $INSTALL_DIR
 RUN apt-get update -y -qq && \
     apt-get upgrade -y -qq && \
     apt-get install -y -qq \
@@ -17,11 +18,14 @@ RUN apt-get update -y -qq && \
     apache2-dev \
     build-essential \
     git \
+    pkg-config \
+    python-dev \
     python3 \
     python3-pip \
     python3-dev \
     python3-setuptools \
     libcurl4-openssl-dev \
+    libpoppler-cpp-dev \
     libssl-dev \
     tzdata \
     libffi-dev \
@@ -57,8 +61,17 @@ RUN echo ${EXPUNGER_USER}:${EXPUNGER_PASS} | chpasswd
 RUN mkdir -p ${APPDIR}/static
 RUN chown --changes --silent --no-dereference --recursive ${EXPUNGER_USER}:${EXPUNGER_USER} ${APPDIR}
 
-# App install
 USER ${EXPUNGER_USER}
+
+# Library install
+WORKDIR ${INSTALL_DIR}/docket_parser
+COPY docket_parser/ .
+RUN pip3 install -r requirements.txt
+RUN pip3 install ./
+
+# App install
+WORKDIR ${APPDIR}
+
 COPY src/ .
 ENV PATH "$PATH:/home/${EXPUNGER_USER}/.local/bin"
 RUN pip3 install --user -r requirements.txt

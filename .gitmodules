@@ -1,6 +1,9 @@
 [submodule "platform/src"]
 	path = platform/src
-	url = https://github.com/Philadelphia-Lawyers-for-Social-Equity/expunger-platform.git
+	url = git@github.com/Philadelphia-Lawyers-for-Social-Equity/expunger-platform.git
 [submodule "frontend/src"]
 	path = frontend/src
 	url = git@github.com:Philadelphia-Lawyers-for-Social-Equity/plse-client.git
+[submodule "platform/docket_parser"]
+	path = platform/docket_parser
+	url = git@github.com:Philadelphia-Lawyers-for-Social-Equity/docket_parser.git
