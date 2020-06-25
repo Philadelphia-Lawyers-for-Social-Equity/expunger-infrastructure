@@ -64,9 +64,17 @@ RUN chown --changes --silent --no-dereference --recursive ${EXPUNGER_USER}:${EXP
 USER ${EXPUNGER_USER}
 
 # Library install
+WORKDIR ${INSTALL_DIR}
+COPY docket_parser/requirements.txt .
+RUN pip3 install -r requirements.txt
+
+COPY src/requirements.txt .
+RUN pip3 install -r requirements.txt
+RUN pip3 install --user mod_wsgi
+
+# Docket parser install
 WORKDIR ${INSTALL_DIR}/docket_parser
 COPY docket_parser/ .
-RUN pip3 install -r requirements.txt
 RUN pip3 install ./
 
 # App install
@@ -74,8 +82,6 @@ WORKDIR ${APPDIR}
 
 COPY src/ .
 ENV PATH "$PATH:/home/${EXPUNGER_USER}/.local/bin"
-RUN pip3 install --user -r requirements.txt
-RUN pip3 install --user mod_wsgi
 RUN python3 ./manage.py collectstatic --noinput
 
 ENTRYPOINT python3 ./manage.py makemigrations && python3 ./manage.py migrate && python3 ./manage.py runmodwsgi --log-to-terminal
